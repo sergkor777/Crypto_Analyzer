@@ -10,7 +10,7 @@ public final class Cipher {
     // Экземпляр Singleton
     private static final Cipher INSTANCE = new Cipher();
 
-    private Cipher() {}
+    private Cipher() { }
 
     public static Cipher getInstance() {
         return INSTANCE;
@@ -27,8 +27,8 @@ public final class Cipher {
                 result.append(ch);
                 continue;
             }
-            if (Constants.alphabetIndex.containsKey(ch)) {
-                int newIndex = (Constants.alphabetIndex.get(ch) + shift) % Constants.ALPHABET.length;
+            if (Constants.getAlphabetIndex().containsKey(ch)) {
+                int newIndex = (Constants.getAlphabetIndex().get(ch) + shift) % Constants.ALPHABET.length;
                 if (newIndex < 0) {
                     newIndex += Constants.ALPHABET.length;
                 }
@@ -51,8 +51,8 @@ public final class Cipher {
                     result.append(ch);
                     continue;
                 }
-                if (Constants.alphabetIndex.containsKey(ch)) {
-                    int newIndex = (Constants.alphabetIndex.get(ch) - shift) % Constants.ALPHABET.length;
+                if (Constants.getAlphabetIndex().containsKey(ch)) {
+                    int newIndex = (Constants.getAlphabetIndex().get(ch) - shift) % Constants.ALPHABET.length;
                     if (newIndex < 0) {
                         newIndex += Constants.ALPHABET.length;
                     }
@@ -73,31 +73,3 @@ public final class Cipher {
         }
     }
 }
-
-
-/*
-        String result = "";
-         char ch = 0;
-        try {
-        for (int i = 0; i < encryptedText.length(); i++) {
-            ch = encryptedText.charAt(i);
-            if (encryptedText.charAt(i) == '\n') result += "\n";
-            else if (encryptedText.charAt(i) == '\r') result += "\r";
-            else
-            if (Constants.alphabetIndex.containsKey(encryptedText.charAt(i))) {
-                result += Constants.ALPHABET[
-                        ((Constants.alphabetIndex.get(encryptedText.charAt(i)) - shift) % Constants.ALPHABET.length >= 0) ?
-                                ((Constants.alphabetIndex.get(encryptedText.charAt(i)) - shift) % Constants.ALPHABET.length)
-                                : Constants.ALPHABET.length + (Constants.alphabetIndex.get(encryptedText.charAt(i))-shift)
-
-                        ];
-            } else throw new AppException(ResourceBundleCache.getInstance().getString("invalid_symbol")+ " - " + ch+" , key=" + shift);
-        }
-        return result;
-    } catch (RuntimeException e) {
-            throw new AppException(ResourceBundleCache.getInstance().getString("invalid_symbol") + " - " + ch +" , key=" + shift, e);
-        }
-    }
-}
-*/
-

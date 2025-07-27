@@ -10,11 +10,11 @@ public class EncoderAction implements Action {
     public Result execute(String[] parameters) {
         try {
             FileManager fileManager = new FileManager();
-            fileManager.encryptFile(parameters[0],parameters[1], Integer.parseInt(parameters[2]));
+            fileManager.encryptFile(parameters[0], parameters[1], Integer.parseInt(parameters[2]));
             return new Result(ResourceBundleCache.getInstance().getString("encode_all_right"), ResultCode.OK);
         } catch (RuntimeException e) {
-            return new Result(ResourceBundleCache.getInstance().getString("error") + " - "
-                    + e.getMessage(), ResultCode.UPDATE_MENU);
+            return new Result(ResourceBundleCache.getInstance().getString("error") + " - " +
+                    e.getMessage(), ResultCode.UPDATE_MENU);
         }
     }
 }

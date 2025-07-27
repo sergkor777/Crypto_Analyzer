@@ -27,49 +27,27 @@ public class FileManager {
         this.bufferSize = bufferSize;
     }
 
-    /*
-
-    public String readFile(String filePath) {
-        // Логика чтения файла маленького размера
-        try {
-            if (Files.isRegularFile(Path.of(filePath))) {
-                Path path = Paths.get(filePath);
-                byte[] bytes = Files.readAllBytes(path);
-                return new String(bytes, StandardCharsets.UTF_8);
-            }
-            throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") + " - " + filePath);
-        } catch (IOException e) {
-            throw new AppException(ResourceBundleCache.getInstance().getString("read_file_error") + " - " + filePath, e);
-        }
-    }
-
-
-    public void writeFile(String content, String filePath) {
-        // Логика записи файла маленького размера
-        try {
-            Files.write(Paths.get(filePath), content.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            throw new AppException(ResourceBundleCache.getInstance().getString("write_file_error") + " - " + filePath, e);
-        }
-    }
-*/
-
     public void encryptFile(String sourceFilePath, String destFilePath, int key) {
         // Инициализация шифра
         Cipher cipher = Cipher.getInstance();
         Validator validator = Validator.getInstance();
-        if (!validator.isValidKey(key, Constants.ALPHABET))
+        if (!validator.isValidKey(key, Constants.ALPHABET)) {
             throw new AppException(ResourceBundleCache.getInstance().getString("invalid_key"));
-        if (!validator.isFileExists(sourceFilePath))
-            throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") + " - " + sourceFilePath);
-        if (!validator.isTxtFile(destFilePath))
-            throw new AppException(destFilePath + " - " + ResourceBundleCache.getInstance().getString("enter_text_file_name"));
+        }
+        if (!validator.isFileExists(sourceFilePath)) {
+            throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") +
+                    " - " + sourceFilePath);
+        }
+        if (!validator.isTxtFile(destFilePath)) {
+            throw new AppException(destFilePath + " - " +
+                    ResourceBundleCache.getInstance().getString("enter_text_file_name"));
+        }
 
         // Потоковое чтение, шифрование и запись
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(Files.newInputStream(Path.of(sourceFilePath)), StandardCharsets.UTF_8));
-             BufferedWriter writer = new BufferedWriter(
-                     new OutputStreamWriter(Files.newOutputStream(Path.of(destFilePath)), StandardCharsets.UTF_8))) {
+                new InputStreamReader(Files.newInputStream(Path.of(sourceFilePath)),
+                StandardCharsets.UTF_8)); BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(Files.newOutputStream(Path.of(destFilePath)), StandardCharsets.UTF_8))) {
 
             char[] buffer = new char[bufferSize];
             int charsRead;
@@ -91,18 +69,23 @@ public class FileManager {
         // Инициализация шифра
         Cipher cipher = Cipher.getInstance();
         Validator validator = Validator.getInstance();
-        if (!validator.isValidKey(key, Constants.ALPHABET))
+        if (!validator.isValidKey(key, Constants.ALPHABET)) {
             throw new AppException(ResourceBundleCache.getInstance().getString("invalid_key"));
-        if (!validator.isFileExists(sourceFilePath))
-            throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") + " - " + sourceFilePath);
-        if (!validator.isTxtFile(destFilePath))
-            throw new AppException(destFilePath + " - " + ResourceBundleCache.getInstance().getString("enter_text_file_name"));
+        }
+        if (!validator.isFileExists(sourceFilePath)) {
+            throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") +
+                    " - " + sourceFilePath);
+        }
+        if (!validator.isTxtFile(destFilePath)) {
+            throw new AppException(destFilePath + " - " +
+                    ResourceBundleCache.getInstance().getString("enter_text_file_name"));
+        }
 
         // Потоковое чтение, расшифровка и запись
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(Files.newInputStream(Path.of(sourceFilePath)), StandardCharsets.UTF_8));
-             BufferedWriter writer = new BufferedWriter(
-                     new OutputStreamWriter(Files.newOutputStream(Path.of(destFilePath)), StandardCharsets.UTF_8))) {
+                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(
+                        Path.of(destFilePath)), StandardCharsets.UTF_8))) {
 
             char[] buffer = new char[bufferSize];
             int charsRead;
@@ -132,9 +115,7 @@ public class FileManager {
             int bestKey = findBestKey(sampleText);
             fileManager.decryptFile(sourceFilePath, destFilePath, bestKey);
         } catch (Exception e) {
-            throw new AppException(
-                    ResourceBundleCache.getInstance().getString("error") + " - " + e.getMessage(), e
-            );
+            throw new AppException(ResourceBundleCache.getInstance().getString("error") + " - " + e.getMessage(), e);
         }
     }
 
@@ -144,12 +125,14 @@ public class FileManager {
             Validator validator = Validator.getInstance();
             // 1.Валидация файлов
             if (!validator.isFileExists(encryptedFile)) {
-                throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") + " - " + encryptedFile);
+                throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") +
+                        " - " + encryptedFile);
             }
             if (!validator.isFileExists(dictionaryFile)) {
-                throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") + " - " + dictionaryFile);
+                throw new AppException(ResourceBundleCache.getInstance().getString("file_not_exists") +
+                        " - " + dictionaryFile);
             }
-             // 2. Анализ частот в словаре
+            // 2. Анализ частот в словаре
             Map<Character, Double> dictFreq = analyzeTextFrequencies(dictionaryFile);
 
             // 3. Анализ зашифрованного текста
@@ -159,11 +142,9 @@ public class FileManager {
             Map<Character, Character> substitutionMap = createSubstitutionMap(cipherFreq, dictFreq);
 
             // 5. Расшифровка с подстановкой
-            applySubstitution(encryptedFile, destFilePath, substitutionMap);        } catch (Exception e) {
-            throw new AppException(
-                    ResourceBundleCache.getInstance().getString("error") + " - " + e.getMessage(),
-                    e
-            );
+            applySubstitution(encryptedFile, destFilePath, substitutionMap);
+        } catch (Exception e) {
+            throw new AppException(ResourceBundleCache.getInstance().getString("error") + " - " + e.getMessage(), e);
         }
 
     }
@@ -200,8 +181,7 @@ public class FileManager {
     }
 
     private Map<Character, Character> createSubstitutionMap(
-            Map<Character, Double> cipherFreq,
-            Map<Character, Double> dictFreq) {
+            Map<Character, Double> cipherFreq, Map<Character, Double> dictFreq) {
 
         // Получаем отсортированные списки символов по частоте
         List<Character> cipherChars = getSortedByFrequency(cipherFreq);
@@ -219,16 +199,15 @@ public class FileManager {
     }
 
     private List<Character> getSortedByFrequency(Map<Character, Double> freqMap) {
-        return freqMap.entrySet().stream()
-                .sorted(Map.Entry.<Character, Double>comparingByValue().reversed())
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+        return freqMap.entrySet().stream().sorted(
+                Map.Entry.<Character, Double>comparingByValue().reversed()).
+                map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
-    private void applySubstitution(String inputFile, String outputFile,
-                                   Map<Character, Character> substitution) throws IOException {
+    private void applySubstitution(String inputFile, String outputFile, Map<Character,
+            Character> substitution) throws IOException {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(inputFile));
-             BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
+                BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFile))) {
 
             int c;
             while ((c = reader.read()) != -1) {
@@ -237,8 +216,7 @@ public class FileManager {
 
                 if (substitution.containsKey(lower)) {
                     char decrypted = substitution.get(lower);
-                    writer.write(Character.isUpperCase(original) ?
-                            Character.toUpperCase(decrypted) : decrypted);
+                    writer.write(Character.isUpperCase(original) ? Character.toUpperCase(decrypted) : decrypted);
                 } else {
                     writer.write(original); // Оставляем символ как есть
                 }
@@ -247,8 +225,7 @@ public class FileManager {
     }
 
     private String readSample(String filePath) {
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader(filePath, StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath, StandardCharsets.UTF_8))) {
             char[] buffer = new char[Constants.MAX_SAMPLE_SIZE];
             int bytesRead = reader.read(buffer, 0, Constants.MAX_SAMPLE_SIZE);
             return new String(buffer, 0, bytesRead);
@@ -276,8 +253,10 @@ public class FileManager {
 
     private double calculateSpaceRatio(String text) {
         int spaceCount = 0;
-        for (int i = 0; i < Math.min(text.length(), 10000); i++) {
-            if (text.charAt(i) == ' ') spaceCount++;
+        for (int i = 0; i < Math.min(text.length(), Constants.MAX_ANALYZE_SYMBOLS); i++) {
+            if (text.charAt(i) == ' ') {
+                spaceCount++;
+            }
         }
         return (double) spaceCount / text.length();
     }

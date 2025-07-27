@@ -2,11 +2,11 @@ package locale;
 
 import java.util.Locale;
 
-public class LocaleManager {
-    public static Locale LOCALE_RU;
-    public static Locale LOCALE_KZ;
-    public static Locale LOCALE_EN;
-    public static Locale LOCALE_AZ;
+public final class LocaleManager {
+    private static Locale localeRu;
+    private static Locale localeKz;
+    private static Locale localeEn;
+    private static Locale localeAz;
 
     private static LocaleManager instance;
 
@@ -22,17 +22,17 @@ public class LocaleManager {
         if (instance == null) {
             instance = new LocaleManager();
         }
-        return instance ;
+        return instance;
     }
 
     private LocaleManager() {
         //noinspection HardCodedStringLiteral
-        LOCALE_RU = new Locale("ru");
+        localeRu = new Locale("ru");
         //noinspection HardCodedStringLiteral
-        LOCALE_KZ = new Locale("kz");
-        LOCALE_EN = new Locale("en");
-        LOCALE_AZ = new Locale("az");
-        locale = LOCALE_EN;
+        localeKz = new Locale("kz");
+        localeEn = new Locale("en");
+        localeAz = new Locale("az");
+        locale = localeEn;
     }
 
     public synchronized Locale getLocale() {
@@ -53,5 +53,19 @@ public class LocaleManager {
         }
     }
 
+    public static Locale getLocaleRu() {
+        return localeRu;
+    }
 
+    public static Locale getLocaleKz() {
+        return localeKz;
+    }
+
+    public static Locale getLocaleEn() {
+        return localeEn;
+    }
+
+    public static Locale getLocaleAz() {
+        return localeAz;
+    }
 }

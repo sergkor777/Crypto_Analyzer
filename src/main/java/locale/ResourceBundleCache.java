@@ -4,18 +4,18 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
- public class ResourceBundleCache {
+public final class ResourceBundleCache {
     private HashMap bundles;
     private static ResourceBundleCache instance;
     public static final String DEFAULT_BUNDLE = "bundles.translations";
     /** @noinspection HardCodedStringLiteral*/
 
 
-    public synchronized static ResourceBundleCache getInstance() {
+    public static synchronized  ResourceBundleCache getInstance() {
         if (instance == null) {
             instance = new ResourceBundleCache();
         }
-        return instance ;
+        return instance;
     }
 
     private ResourceBundleCache() {

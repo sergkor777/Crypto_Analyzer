@@ -9,7 +9,7 @@ public final class Validator {
 
     private static final Validator INSTANCE = new Validator();
 
-    private Validator() {}
+    private Validator() { }
 
     public static Validator getInstance() {
         return INSTANCE;
@@ -18,7 +18,7 @@ public final class Validator {
 
     public boolean isValidKey(int key, char[] alphabet) {
         // Проверка ключа
-        return (key >=0 && key <= alphabet.length-1);
+        return (key >= 0 && key <= alphabet.length - 1);
     }
     public  boolean isFileExists(String filePath) {
         // Проверка существования файла
